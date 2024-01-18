@@ -2,18 +2,19 @@ import * as React from "react";
 
 interface LevelProps {
   difficulty: string;
+  className?: string;
 }
 
 function Level(props: LevelProps) {
   return (
     <svg
-      width={512}
-      height={140}
+      width="100%"
+      height="100%"
       viewBox="0 0 512 151"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="transition duration-300 ease-in-out transform hover:scale-110"
-      style={{ cursor: "pointer" }}
+      // className="transition duration-300 ease-in-out transform hover:scale-110"
+      // style={{ cursor: "pointer" }}
       {...props}
     >
       <path
