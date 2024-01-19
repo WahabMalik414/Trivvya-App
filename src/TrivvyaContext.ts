@@ -5,6 +5,7 @@ export interface TrivvyaContextType {
   setDifficulty: Dispatch<SetStateAction<string>>;
   category: string;
   setCategory: Dispatch<SetStateAction<string>>;
+  generateApiRequest: () => string;
 }
 
 export const TrivvyaContext = createContext<TrivvyaContextType | undefined>(

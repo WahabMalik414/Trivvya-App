@@ -3,6 +3,7 @@ import * as React from "react";
 interface LevelProps {
   difficulty: string;
   className?: string;
+  onClick?: () => void;
 }
 
 function Level(props: LevelProps) {

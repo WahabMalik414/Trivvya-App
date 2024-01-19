@@ -16,13 +16,22 @@ export default function LevelPage() {
         </p>
         <div className="flex flex-col items-center gap-y-5 mt-36 w-full px-5 md:px-0 md:mt-10">
           <Link to={`/category`} onClick={() => handleLevelClick("easy")}>
-            <Level difficulty="EASY" className="h-28 md:h-36" />
+            <Level
+              difficulty="EASY"
+              className="h-28 md:h-36 transition duration-300 ease-in-out transform hover:scale-110"
+            />
           </Link>
           <Link to={`/category`} onClick={() => handleLevelClick("medium")}>
-            <Level difficulty="MEDIUM" className="h-28 md:h-36" />
+            <Level
+              difficulty="MEDIUM"
+              className="h-28 md:h-36 transition duration-300 ease-in-out transform hover:scale-110"
+            />
           </Link>
           <Link to={`/category`} onClick={() => handleLevelClick("hard")}>
-            <Level difficulty="HARD" className="h-28 md:h-36" />
+            <Level
+              difficulty="HARD"
+              className="h-28 md:h-36 transition duration-300 ease-in-out transform hover:scale-110"
+            />
           </Link>
         </div>
       </div>
