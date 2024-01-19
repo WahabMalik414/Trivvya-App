@@ -15,6 +15,7 @@ export default function LevelPage() {
           PICK THE LEVEL
         </p>
         <div className="flex flex-col items-center gap-y-5 mt-36 w-full px-5 md:px-0 md:mt-10">
+          //TODO:change them to useNavigate hooks
           <Link to={`/category`} onClick={() => handleLevelClick("easy")}>
             <Level
               difficulty="EASY"

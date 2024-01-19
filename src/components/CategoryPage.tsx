@@ -1,14 +1,16 @@
 import React, { useContext } from "react";
 import Level from "../../Assets/Svgs/Level";
 import { TrivvyaContextType, TrivvyaContext } from "../TrivvyaContext";
+import { useNavigate } from "react-router-dom";
 
 export default function CategoryPage() {
   const { setCategory, generateApiRequest } = useContext(
     TrivvyaContext
   ) as TrivvyaContextType;
-
+  const navigate = useNavigate();
   const handleCategoryClick = (selectedCategory: string) => {
     setCategory(selectedCategory);
+    navigate("/puzzle");
 
     // Generate and use the API request here
     const apiRequest = generateApiRequest();

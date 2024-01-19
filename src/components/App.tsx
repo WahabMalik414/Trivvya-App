@@ -4,6 +4,8 @@ import LevelPage from "./LevelPage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import CategoryPage from "./CategoryPage";
 import { TrivvyaProvider } from "../TrivvyaContextProvider";
+import PuzzlePage from "./puzzlePage";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -16,6 +18,10 @@ const router = createBrowserRouter([
   {
     path: "/category",
     element: <CategoryPage />,
+  },
+  {
+    path: "/puzzle",
+    element: <PuzzlePage />,
   },
 ]);
 function App() {
