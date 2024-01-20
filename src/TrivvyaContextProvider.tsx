@@ -10,9 +10,11 @@ export function TrivvyaProvider({ children }: TrivvyaProviderProps) {
   const [category, setCategory] = useState("");
   const [trueAnswer, setTrueAnswer] = useState("0");
   const [displayAnswer, setDisplayAnswer] = useState("");
+  const [questions, setQuestions] = useState([]);
   const [question, setQuestion] = useState("");
+
   const generateApiRequest = () => {
-    return `https://opentdb.com/api.php?amount=25&category=${category}&difficulty=${difficulty}&type=multiple`;
+    return `https://opentdb.com/api.php?amount=10&category=${category}&difficulty=${difficulty}&type=multiple`;
   };
 
   useEffect(() => {
@@ -23,12 +25,6 @@ export function TrivvyaProvider({ children }: TrivvyaProviderProps) {
     );
   }, [trueAnswer]);
 
-  useEffect(() => {
-    if (displayAnswer === trueAnswer) {
-      // Show an alert when the puzzle is solved
-      console.log("Successfully solved");
-    }
-  }, [displayAnswer, trueAnswer]);
   const revealCharacter = (character: string) => {
     console.log(character);
     console.log(trueAnswer);
@@ -59,6 +55,8 @@ export function TrivvyaProvider({ children }: TrivvyaProviderProps) {
         setDisplayAnswer,
         question,
         setQuestion,
+        questions,
+        setQuestions,
       }}
     >
       {children}

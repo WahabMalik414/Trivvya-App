@@ -16,38 +16,77 @@ export default function PuzzlePage() {
     TrivvyaContext
   ) as TrivvyaContextType;
   // State to manage the puzzle data
-  const { question, setQuestion, displayAnswer, setTrueAnswer } = useContext(
-    TrivvyaContext
-  ) as TrivvyaContextType;
+  const {
+    questions,
+    setQuestions,
+    displayAnswer,
+    setTrueAnswer,
+    setDisplayAnswer,
+    revealCharacter,
+    question,
+    setQuestion,
+    trueAnswer,
+  } = useContext(TrivvyaContext) as TrivvyaContextType;
 
   const fetchPuzzleData = async () => {
     try {
       const response = await fetch(generateApiRequest());
       const data = await response.json();
 
-      // Extract relevant information from API response
       const puzzleData = data.results.filter((result) => {
         const answer = he.decode(result.correct_answer.toLowerCase());
-        // Check if the answer is a single word and doesn't contain numbers
         return answer.split(" ").length === 1 && !/\d/.test(answer);
       });
 
-      // If there are valid puzzle data, update the state
       if (puzzleData.length > 0) {
-        const { question, correct_answer: answer } = puzzleData[0];
-        console.log(question);
-        console.log(answer);
-        setQuestion(he.decode(question));
-        setTrueAnswer(he.decode(answer.toLowerCase()).split("").join(" "));
+        const newQuestions = puzzleData.map(({ question, correct_answer }) => ({
+          question: he.decode(question),
+          answer: he.decode(correct_answer.toLowerCase()).split("").join(" "),
+        }));
+        setQuestions(newQuestions);
+
+        // Set the first question initially
+        const { question, answer } = newQuestions[0];
+        setQuestion(question);
+        setTrueAnswer(answer);
       } else {
-        // If no valid puzzle data is found, you might want to handle it accordingly
         console.log("No valid puzzle data found.");
       }
     } catch (error) {
       console.error("Error fetching puzzle data:", error);
     }
   };
+  const handlePuzzleSolved = () => {
+    console.log("Successfully solved");
+    console.log("in handle puzzle solved");
 
+    // Find the index of the current question in the questions array
+    const currentIndex = questions.findIndex((q) => q.question === question);
+
+    // Check if there are more questions
+    if (currentIndex < questions.length - 1) {
+      // Move to the next question
+      const nextQuestion = questions[currentIndex + 1];
+      setQuestion(nextQuestion.question);
+      setTrueAnswer(nextQuestion.answer);
+
+      // Reset the displayAnswer state
+      setDisplayAnswer(
+        nextQuestion.answer
+          .split("")
+          .map((char) => (char === " " ? " " : "_"))
+          .join("")
+      );
+    } else {
+      console.log("All questions have been answered.");
+    }
+  };
+  useEffect(() => {
+    if (displayAnswer === trueAnswer) {
+      handlePuzzleSolved();
+    }
+    console.log("here");
+  }, [displayAnswer, trueAnswer, questions, question]);
   // useEffect to fetch data when the component mounts
   useEffect(() => {
     fetchPuzzleData();

@@ -12,7 +12,9 @@ export interface TrivvyaContextType {
   setTrueAnswer: Dispatch<SetStateAction<string>>;
   setDisplayAnswer: Dispatch<SetStateAction<string>>;
   question: string;
+  questions: string[];
   setQuestion: Dispatch<SetStateAction<string>>;
+  setQuestions: Dispatch<SetStateAction<string>>;
 }
 
 export const TrivvyaContext = createContext<TrivvyaContextType | undefined>(
