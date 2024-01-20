@@ -1,12 +1,11 @@
-import { useContext } from "react";
 import Level from "../../Assets/Svgs/Level";
 import { Link } from "react-router-dom";
-import { TrivvyaContext, TrivvyaContextType } from "../TrivvyaContext";
-
+import { useDispatch } from "react-redux";
+import { setDifficulty } from "../../store/trivvyaSlice";
 export default function LevelPage() {
-  const { setDifficulty } = useContext(TrivvyaContext) as TrivvyaContextType;
+  const dispatch = useDispatch();
   const handleLevelClick = (selectedDifficulty: string) => {
-    setDifficulty(selectedDifficulty);
+    dispatch(setDifficulty(selectedDifficulty));
   };
   return (
     <div className="flex  min-h-screen">

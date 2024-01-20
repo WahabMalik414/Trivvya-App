@@ -13,10 +13,6 @@ export function TrivvyaProvider({ children }: TrivvyaProviderProps) {
   const [questions, setQuestions] = useState([]);
   const [question, setQuestion] = useState("");
 
-  const generateApiRequest = () => {
-    return `https://opentdb.com/api.php?amount=10&category=${category}&difficulty=${difficulty}&type=multiple`;
-  };
-
   useEffect(() => {
     setDisplayAnswer(
       Array.from(trueAnswer)
@@ -47,7 +43,6 @@ export function TrivvyaProvider({ children }: TrivvyaProviderProps) {
         setDifficulty,
         category,
         setCategory,
-        generateApiRequest,
         revealCharacter,
         trueAnswer,
         setTrueAnswer,

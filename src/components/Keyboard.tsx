@@ -1,13 +1,11 @@
 import React, { useContext } from "react";
 import Button from "../../Assets/Svgs/Button";
 import { TrivvyaContext, TrivvyaContextType } from "../TrivvyaContext";
-
+import UseRevealCharacter from "../../utils/revealCharacter";
 function QwertyKeyboard() {
-  const { revealCharacter } = useContext(TrivvyaContext) as TrivvyaContextType;
-
   // QWERTY layout for the keyboard
   const qwertyLayout = ["qwertyuiop", "asdfghjkl", "zxcvbnm"];
-
+  const revealCharacter = UseRevealCharacter();
   return (
     <div className="flex flex-col gap-y-2">
       {qwertyLayout.map((row, rowIndex) => (

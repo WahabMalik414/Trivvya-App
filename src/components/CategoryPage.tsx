@@ -1,20 +1,13 @@
-import React, { useContext } from "react";
 import Level from "../../Assets/Svgs/Level";
-import { TrivvyaContextType, TrivvyaContext } from "../TrivvyaContext";
 import { useNavigate } from "react-router-dom";
-
+import { useDispatch } from "react-redux";
+import { setCategory } from "../../store/trivvyaSlice";
 export default function CategoryPage() {
-  const { setCategory, generateApiRequest } = useContext(
-    TrivvyaContext
-  ) as TrivvyaContextType;
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleCategoryClick = (selectedCategory: string) => {
-    setCategory(selectedCategory);
+    dispatch(setCategory(selectedCategory));
     navigate("/puzzle");
-
-    // Generate and use the API request here
-    const apiRequest = generateApiRequest();
-    console.log("API Request:", apiRequest);
   };
 
   return (
