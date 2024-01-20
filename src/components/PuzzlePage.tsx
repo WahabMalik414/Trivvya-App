@@ -5,18 +5,20 @@ import { TrivvyaContextType } from "../TrivvyaContext";
 import he from "he";
 import Button from "../../Assets/Svgs/Button";
 import Keyboard from "./Keyboard";
+import Category from "../../Assets/Svgs/Category";
+import Home from "../../Assets/Svgs/Home";
+import Puzzle from "../../Assets/Svgs/Puzzle";
+import Answer from "../../Assets/Svgs/Answer";
+import { useNavigate } from "react-router-dom";
 export default function PuzzlePage() {
+  const navigate = useNavigate();
   const { generateApiRequest } = useContext(
     TrivvyaContext
   ) as TrivvyaContextType;
   // State to manage the puzzle data
-  const {
-    question,
-    setQuestion,
-    displayAnswer,
-    setTrueAnswer,
-    revealCharacter,
-  } = useContext(TrivvyaContext) as TrivvyaContextType;
+  const { question, setQuestion, displayAnswer, setTrueAnswer } = useContext(
+    TrivvyaContext
+  ) as TrivvyaContextType;
 
   const fetchPuzzleData = async () => {
     try {
@@ -51,8 +53,24 @@ export default function PuzzlePage() {
     fetchPuzzleData();
   }, []);
   return (
-    <div className="flex bg-TrivvyaBlue h-screen">
-      <div className="flex flex-col text-center gap-y-7 px-10">
+    <div className="flex flex-col bg-TrivvyaBlue h-screen">
+      <div className="flex gap-x-5 justify-center mb-3">
+        <Category
+          className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer"
+          onClick={() => {
+            navigate("/category");
+          }}
+        />
+        <Answer className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer" />
+        <Puzzle className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer" />
+        <Home
+          className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer"
+          onClick={() => {
+            navigate("/");
+          }}
+        />
+      </div>
+      <div className="flex flex-col text-center gap-y-2 px-10">
         <p className="text-white text-5xl font-bold">Solve the puzzle</p>
         <p className="text-white font-semibold text-2xl">
           You get 1 consonant now! Answer Trivia questions to get more letters.
@@ -73,7 +91,7 @@ export default function PuzzlePage() {
             {displayAnswer}
           </p>
         </div>
-        <div className="flex justify-center">
+        <div className="flex justify-center mt-3">
           <Keyboard />
         </div>
       </div>

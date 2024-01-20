@@ -17,7 +17,7 @@ function QwertyKeyboard() {
               key={index}
               text={letter}
               onClick={() => revealCharacter(letter)}
-              className="cursor-pointer mx-1"
+              className="cursor-pointer mx-1 transition duration-300 ease-in-out transform hover:scale-125"
             />
           ))}
         </div>

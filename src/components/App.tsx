@@ -4,7 +4,7 @@ import LevelPage from "./LevelPage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import CategoryPage from "./CategoryPage";
 import { TrivvyaProvider } from "../TrivvyaContextProvider";
-import PuzzlePage from "./puzzlePage";
+import PuzzlePage from "./PuzzlePage";
 
 const router = createBrowserRouter([
   {
