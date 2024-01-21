@@ -26,7 +26,7 @@ export default function PuzzlePage() {
   const trueAnswer = useSelector((state) => state.quiz.trueAnswer);
   const question = useSelector((state) => state.quiz.question);
   const category = useSelector((state) => state.quiz.category);
-  const level = useSelector((state) => state.quiz.level);
+  const level = useSelector((state) => state.quiz.difficulty);
   const loading = useSelector((state) => state.quiz.loading);
 
   const dispatch = useDispatch();
@@ -34,9 +34,7 @@ export default function PuzzlePage() {
   const fetchPuzzleData = async () => {
     try {
       dispatch(setLoading(true));
-      const response = await fetch(
-        "https://opentdb.com/api.php?amount=10&category=21&difficulty=easy&type=multiple"
-      );
+      const response = await fetch(generateApiRequest(category, level));
       const data = await response.json();
       console.log(data);
       dispatch(setLoading(false));
@@ -88,7 +86,8 @@ export default function PuzzlePage() {
         )
       );
     } else {
-      console.log("All questions have been answered.");
+      console.log("All questions have been answered. fetching next questions.");
+      fetchPuzzleData();
     }
   };
   useEffect(() => {
