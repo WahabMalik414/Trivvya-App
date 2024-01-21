@@ -1,6 +1,8 @@
-import * as React from "react";
-
-function Answer(props) {
+type classNameProp = {
+  className?: string;
+  onClick?: () => void;
+};
+function Answer(props: classNameProp) {
   return (
     <svg
       width={120}

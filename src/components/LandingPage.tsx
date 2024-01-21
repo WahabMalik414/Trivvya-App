@@ -1,4 +1,3 @@
-import React from "react";
 import PlayButton from "../../Assets/Svgs/PlayButton";
 import Trivvya from "../../Assets/Svgs/Trivvya";
 import { Link } from "react-router-dom";

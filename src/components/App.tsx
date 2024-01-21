@@ -1,9 +1,7 @@
-import React from "react";
 import LandingPage from "./LandingPage";
 import LevelPage from "./LevelPage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import CategoryPage from "./CategoryPage";
-import { TrivvyaProvider } from "../TrivvyaContextProvider";
 import PuzzlePage from "./PuzzlePage";
 
 const router = createBrowserRouter([
@@ -26,9 +24,9 @@ const router = createBrowserRouter([
 ]);
 function App() {
   return (
-    <TrivvyaProvider>
+    <>
       <RouterProvider router={router} />
-    </TrivvyaProvider>
+    </>
   );
 }
 

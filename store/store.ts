@@ -1,7 +1,7 @@
 // store.js
 
 import { configureStore } from "@reduxjs/toolkit";
-import trivvyaReducer from "./trivvyaSlice";
+import trivvyaReducer from "./TrivvyaSlice";
 const store = configureStore({
   reducer: {
     quiz: trivvyaReducer,
@@ -9,3 +9,5 @@ const store = configureStore({
 });
 
 export default store;
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

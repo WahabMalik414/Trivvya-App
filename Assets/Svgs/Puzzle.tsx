@@ -1,6 +1,7 @@
-import * as React from "react";
-
-function Puzzle(props) {
+type classNameProp = {
+  className?: string;
+};
+function Puzzle(props: classNameProp) {
   return (
     <svg
       width={120}

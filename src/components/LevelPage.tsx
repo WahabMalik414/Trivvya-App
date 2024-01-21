@@ -1,11 +1,13 @@
 import Level from "../../Assets/Svgs/Level";
-import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setDifficulty } from "../../store/trivvyaSlice";
+import { setDifficulty } from "../../store/TrivvyaSlice";
+import { useAppDispatch } from "../../hooks/hooks";
+import { useNavigate } from "react-router-dom";
 export default function LevelPage() {
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const handleLevelClick = (selectedDifficulty: string) => {
     dispatch(setDifficulty(selectedDifficulty));
+    navigate("/category");
   };
   return (
     <div className="flex  min-h-screen">
@@ -14,25 +16,24 @@ export default function LevelPage() {
           PICK THE LEVEL
         </p>
         <div className="flex flex-col items-center gap-y-5 mt-36 w-full px-5 md:px-0 md:mt-10">
-          //TODO:change them to useNavigate hooks
-          <Link to={`/category`} onClick={() => handleLevelClick("easy")}>
+          <div onClick={() => handleLevelClick("easy")}>
             <Level
               difficulty="EASY"
-              className="h-28 md:h-36 transition duration-300 ease-in-out transform hover:scale-110"
+              className="h-28 md:h-36 transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer"
             />
-          </Link>
-          <Link to={`/category`} onClick={() => handleLevelClick("medium")}>
+          </div>
+          <div onClick={() => handleLevelClick("medium")}>
             <Level
               difficulty="MEDIUM"
-              className="h-28 md:h-36 transition duration-300 ease-in-out transform hover:scale-110"
+              className="h-28 md:h-36 transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer"
             />
-          </Link>
-          <Link to={`/category`} onClick={() => handleLevelClick("hard")}>
+          </div>
+          <div onClick={() => handleLevelClick("hard")}>
             <Level
               difficulty="HARD"
-              className="h-28 md:h-36 transition duration-300 ease-in-out transform hover:scale-110"
+              className="h-28 md:h-36 transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer"
             />
-          </Link>
+          </div>
         </div>
       </div>
     </div>

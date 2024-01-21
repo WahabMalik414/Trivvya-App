@@ -1,5 +1,3 @@
-import * as React from "react";
-
 interface buttonProp {
   text: string;
   onClick?: () => void;
@@ -9,8 +7,8 @@ interface buttonProp {
 function Button(props: buttonProp) {
   return (
     <svg
-      width={90}
-      height={90}
+      width="100%"
+      height="100%"
       viewBox="0 0 90 90"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

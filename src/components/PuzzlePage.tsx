@@ -1,8 +1,6 @@
 //TODO: Very important: 1) fetch new data once the array has exhausted. 2)utils 3)further functionality.
 
-import React from "react";
 import { useEffect } from "react";
-
 import he from "he";
 import Keyboard from "./Keyboard";
 import Category from "../../Assets/Svgs/Category";
@@ -10,27 +8,34 @@ import Home from "../../Assets/Svgs/Home";
 import Puzzle from "../../Assets/Svgs/Puzzle";
 import Answer from "../../Assets/Svgs/Answer";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import {
   setQuestion,
   setTrueAnswer,
   setDisplayAnswer,
   setQuestions,
   setLoading,
-} from "../../store/trivvyaSlice";
+} from "../../store/TrivvyaSlice";
 import generateApiRequest from "../../utils/generateApiRequest";
 export default function PuzzlePage() {
   const navigate = useNavigate();
-  const questions = useSelector((state) => state.quiz.questions);
-  const displayAnswer = useSelector((state) => state.quiz.displayAnswer);
-  const trueAnswer = useSelector((state) => state.quiz.trueAnswer);
-  const question = useSelector((state) => state.quiz.question);
-  const category = useSelector((state) => state.quiz.category);
-  const level = useSelector((state) => state.quiz.difficulty);
-  const loading = useSelector((state) => state.quiz.loading);
+  const questions = useAppSelector((state) => state.quiz.questions);
+  const displayAnswer = useAppSelector((state) => state.quiz.displayAnswer);
+  const trueAnswer = useAppSelector((state) => state.quiz.trueAnswer);
+  const question = useAppSelector((state) => state.quiz.question);
+  const category = useAppSelector((state) => state.quiz.category);
+  const level = useAppSelector((state) => state.quiz.difficulty);
+  const loading = useAppSelector((state) => state.quiz.loading);
 
-  const dispatch = useDispatch();
-
+  const dispatch = useAppDispatch();
+  type ApiResponse = {
+    type: string;
+    difficulty: string;
+    category: string;
+    question: string;
+    correct_answer: string;
+    incorrect_answers: string[];
+  };
   const fetchPuzzleData = async () => {
     try {
       dispatch(setLoading(true));
@@ -38,16 +43,24 @@ export default function PuzzlePage() {
       const data = await response.json();
       console.log(data);
       dispatch(setLoading(false));
-      const puzzleData = data.results.filter((result) => {
+      const puzzleData = data.results.filter((result: ApiResponse) => {
         const answer = he.decode(result.correct_answer.toLowerCase());
         return answer.split(" ").length === 1 && !/\d/.test(answer);
       });
 
       if (puzzleData.length > 0) {
-        const newQuestions = puzzleData.map(({ question, correct_answer }) => ({
-          question: he.decode(question),
-          answer: he.decode(correct_answer.toLowerCase()).split("").join(" "),
-        }));
+        const newQuestions = puzzleData.map(
+          ({
+            question,
+            correct_answer,
+          }: {
+            question: string;
+            correct_answer: string;
+          }) => ({
+            question: he.decode(question),
+            answer: he.decode(correct_answer.toLowerCase()).split("").join(" "),
+          })
+        );
         dispatch(setQuestions(newQuestions));
 
         // Set the first question initially
@@ -96,59 +109,65 @@ export default function PuzzlePage() {
     }
     console.log("here");
   }, [displayAnswer, trueAnswer, questions, question]);
-  // useEffect to fetch data when the component mounts
+
   useEffect(() => {
     fetchPuzzleData();
   }, []);
 
   useEffect(() => {
-    dispatch(setDisplayAnswer(0));
+    dispatch(setDisplayAnswer("initialize"));
   }, [trueAnswer]);
 
   if (loading) {
     return <div>loading</div>;
   } else {
     return (
-      <div className="flex flex-col bg-TrivvyaBlue h-screen">
-        <div className="flex gap-x-5 justify-center mb-3">
-          <Category
-            className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer"
-            onClick={() => {
-              navigate("/category");
-            }}
-          />
-          <Answer className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer" />
-          <Puzzle className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer" />
-          <Home
-            className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer"
-            onClick={() => {
-              navigate("/");
-            }}
-          />
-        </div>
-        <div className="flex flex-col text-center gap-y-2 px-10">
-          <p className="text-white text-5xl font-bold">Solve the puzzle</p>
-          <p className="text-white font-semibold text-2xl">
-            You get 1 consonant now! Answer Trivia questions to get more
-            letters. The sooner you can answer, the more points you score. Get 3
-            questions wrong and game over.
-          </p>
-          <p className="text-white text-6xl font-bold">CLUE</p>
-          <p className="text-white font-semibold text-2xl">{question}</p>
-          <p className="text-white font-semibold text-2xl">
-            Level: Easy - 0 consonant. Click “Answer a question” button to get
-            more letters.
-          </p>
-          <div className="text-white font-bold text-8xl">
-            <p>
-              {/* {Array.from(answer).map((letter, index) => (
+      <div className="flex  min-h-screen">
+        <div className="flex flex-col bg-TrivvyaBlue ">
+          <div className="flex md:gap-x-5 justify-center mb-3">
+            <Category
+              className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32"
+              onClick={() => {
+                navigate("/category");
+              }}
+            />
+            <Answer className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32" />
+            <Puzzle className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32" />
+            <Home
+              className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32"
+              onClick={() => {
+                navigate("/");
+              }}
+            />
+          </div>
+          <div className="flex flex-col text-center md:px-10 gap-y-2">
+            <p className="text-white text-3xl md:text-5xl font-bold">
+              Solve the puzzle
+            </p>
+            <p className="text-white font-semibold text-xl md:text-2xl">
+              You get 1 consonant now! Answer Trivia questions to get more
+              letters. The sooner you can answer, the more points you score. Get
+              3 questions wrong and game over.
+            </p>
+            <p className="text-white text-3xl md:text-5xl font-bold">CLUE</p>
+            <p className="text-white font-semibold text-xl md:text-2xl">
+              {question}
+            </p>
+            <p className="text-white font-semibold text-xl md:text-2xl">
+              Level: Easy - 0 consonant. Click “Answer a question” button to get
+              more letters.
+            </p>
+            <div className="text-white font-bold text-3xl md:text-6xl">
+              <p>
+                {/* {Array.from(answer).map((letter, index) => (
               <span key={index}>{revealCharacter(letter)}</span>
             ))} */}
-              {displayAnswer}
-            </p>
-          </div>
-          <div className="flex justify-center mt-3">
-            <Keyboard />
+                {displayAnswer}
+              </p>
+            </div>
+            <div className="flex justify-center mt-5">
+              <Keyboard />
+            </div>
           </div>
         </div>
       </div>

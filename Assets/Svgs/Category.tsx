@@ -1,6 +1,8 @@
-import * as React from "react";
-
-function Category(props) {
+type classNameProp = {
+  className?: string;
+  onClick?: () => void;
+};
+function Category(props: classNameProp) {
   return (
     <svg
       width={120}
