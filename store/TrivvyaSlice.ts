@@ -13,7 +13,7 @@ interface quizState {
 const initialState: quizState = {
   difficulty: "",
   category: "",
-  trueAnswer: "0",
+  trueAnswer: "initial",
   displayAnswer: "",
   questions: [],
   question: "",
@@ -42,6 +42,10 @@ const trivvyaSlice = createSlice({
     setDisplayAnswer: (state, action: PayloadAction<string>) => {
       console.log(action.payload);
       console.log(state.trueAnswer);
+      if (action.payload === state.trueAnswer) {
+        state.displayAnswer = state.trueAnswer;
+        return;
+      }
       if (action.payload === "initialize") {
         console.log("is zero");
         const newDisplayAnswer = Array.from(state.trueAnswer)

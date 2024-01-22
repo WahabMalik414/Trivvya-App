@@ -1,5 +1,7 @@
 type classNameProp = {
   className?: string;
+  onClick?: () => void;
+
 };
 function Puzzle(props: classNameProp) {
   return (

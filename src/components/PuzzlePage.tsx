@@ -1,12 +1,14 @@
 //TODO: Very important: 1) fetch new data once the array has exhausted. 2)utils 3)further functionality.
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import he from "he";
 import Keyboard from "./Keyboard";
 import Category from "../../Assets/Svgs/Category";
 import Home from "../../Assets/Svgs/Home";
 import Puzzle from "../../Assets/Svgs/Puzzle";
 import Answer from "../../Assets/Svgs/Answer";
+import ConfettiExplosion from "react-confetti-explosion";
+
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import {
@@ -18,6 +20,7 @@ import {
 } from "../../store/TrivvyaSlice";
 import generateApiRequest from "../../utils/generateApiRequest";
 export default function PuzzlePage() {
+  const [isExploding, setIsExploding] = useState(false);
   const navigate = useNavigate();
   const questions = useAppSelector((state) => state.quiz.questions);
   const displayAnswer = useAppSelector((state) => state.quiz.displayAnswer);
@@ -77,31 +80,38 @@ export default function PuzzlePage() {
   };
   const handlePuzzleSolved = () => {
     console.log("Successfully solved");
-    console.log("in handle puzzle solved");
-
+    setIsExploding(true);
     // Find the index of the current question in the questions array
-    const currentIndex = questions.findIndex((q) => q.question === question);
 
-    // Check if there are more questions
-    if (currentIndex < questions.length - 1) {
-      // Move to the next question
-      const nextQuestion = questions[currentIndex + 1];
-      dispatch(setQuestion(nextQuestion.question));
-      dispatch(setTrueAnswer(nextQuestion.answer));
+    setTimeout(() => {
+      setIsExploding(false);
 
-      // Reset the displayAnswer state
-      dispatch(
-        setDisplayAnswer(
-          nextQuestion.answer
-            .split("")
-            .map((char) => (char === " " ? " " : "_"))
-            .join("")
-        )
-      );
-    } else {
-      console.log("All questions have been answered. fetching next questions.");
-      fetchPuzzleData();
-    }
+      // Find the index of the current question in the questions array
+      const currentIndex = questions.findIndex((q) => q.question === question);
+
+      // Check if there are more questions
+      if (currentIndex < questions.length - 1) {
+        // Move to the next question
+        const nextQuestion = questions[currentIndex + 1];
+        dispatch(setQuestion(nextQuestion.question));
+        dispatch(setTrueAnswer(nextQuestion.answer));
+
+        // Reset the displayAnswer state
+        dispatch(
+          setDisplayAnswer(
+            nextQuestion.answer
+              .split("")
+              .map((char) => (char === " " ? " " : "_"))
+              .join("")
+          )
+        );
+      } else {
+        console.log(
+          "All questions have been answered. Fetching next questions."
+        );
+        fetchPuzzleData();
+      }
+    }, 3000);
   };
   useEffect(() => {
     if (displayAnswer === trueAnswer) {
@@ -118,59 +128,84 @@ export default function PuzzlePage() {
     dispatch(setDisplayAnswer("initialize"));
   }, [trueAnswer]);
 
+  const handleSolvePuzzle = () => {
+    dispatch(setDisplayAnswer(trueAnswer));
+    setTimeout(() => {
+      alert("game over!");
+      navigate("/");
+    }, 1500);
+  };
   if (loading) {
     return <div>loading</div>;
   } else {
     return (
-      <div className="flex  min-h-screen">
-        <div className="flex flex-col bg-TrivvyaBlue ">
-          <div className="flex md:gap-x-5 justify-center mb-3">
-            <Category
-              className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32"
-              onClick={() => {
-                navigate("/category");
-              }}
-            />
-            <Answer className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32" />
-            <Puzzle className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32" />
-            <Home
-              className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32"
-              onClick={() => {
-                navigate("/");
-              }}
-            />
-          </div>
-          <div className="flex flex-col text-center md:px-10 gap-y-2">
-            <p className="text-white text-3xl md:text-5xl font-bold">
-              Solve the puzzle
-            </p>
-            <p className="text-white font-semibold text-xl md:text-2xl">
-              You get 1 consonant now! Answer Trivia questions to get more
-              letters. The sooner you can answer, the more points you score. Get
-              3 questions wrong and game over.
-            </p>
-            <p className="text-white text-3xl md:text-5xl font-bold">CLUE</p>
-            <p className="text-white font-semibold text-xl md:text-2xl">
-              {question}
-            </p>
-            <p className="text-white font-semibold text-xl md:text-2xl">
-              Level: Easy - 0 consonant. Click “Answer a question” button to get
-              more letters.
-            </p>
-            <div className="text-white font-bold text-3xl md:text-6xl">
-              <p>
-                {/* {Array.from(answer).map((letter, index) => (
+      <>
+        <div className="flex  min-h-screen">
+          <div className="flex flex-col bg-TrivvyaBlue ">
+            <div className="flex md:gap-x-5 justify-center mb-3">
+              <Category
+                className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32"
+                onClick={() => {
+                  navigate("/category");
+                }}
+              />
+              <Answer className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32" />
+              <Puzzle
+                className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32"
+                onClick={() => {
+                  handleSolvePuzzle();
+                }}
+              />
+              <Home
+                className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32"
+                onClick={() => {
+                  navigate("/");
+                }}
+              />
+            </div>
+            <div className="flex flex-col text-center md:px-10 gap-y-2">
+              <p className="text-white text-3xl md:text-5xl font-bold">
+                Solve the puzzle
+              </p>
+              <p className="text-white font-semibold text-xl md:text-2xl">
+                You get 1 consonant now! Answer Trivia questions to get more
+                letters. The sooner you can answer, the more points you score.
+                Get 3 questions wrong and game over.
+              </p>
+              <div className="justify-center items-center">
+                {isExploding && (
+                  <ConfettiExplosion
+                    force={0.8}
+                    duration={3000}
+                    particleCount={300}
+                    width={1600}
+                  />
+                )}
+              </div>
+              <p className="text-white text-3xl md:text-5xl font-bold">CLUE</p>
+              <p className="text-white font-semibold text-xl md:text-2xl">
+                {question}
+              </p>
+              <p className="text-white font-semibold text-xl md:text-2xl">
+                Level: Easy - 0 consonant. Click “Answer a question” button to
+                get more letters.
+              </p>
+              <div className="text-white font-bold text-3xl md:text-6xl">
+                <p>
+                  {/* {Array.from(answer).map((letter, index) => (
               <span key={index}>{revealCharacter(letter)}</span>
             ))} */}
-                {displayAnswer}
-              </p>
-            </div>
-            <div className="flex justify-center mt-5">
-              <Keyboard />
+
+                  {displayAnswer}
+                </p>
+              </div>
+              <div className="flex justify-center mt-5">
+                <Keyboard />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 }
