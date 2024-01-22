@@ -2,6 +2,8 @@ import Level from "../../Assets/Svgs/Level";
 import { setDifficulty } from "../../store/TrivvyaSlice";
 import { useAppDispatch } from "../../hooks/hooks";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { resetTries } from "../../store/TrivvyaSlice";
 export default function LevelPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -9,6 +11,10 @@ export default function LevelPage() {
     dispatch(setDifficulty(selectedDifficulty));
     navigate("/category");
   };
+
+  useEffect(() => {
+    dispatch(resetTries());
+  }, []);
   return (
     <div className="flex  min-h-screen">
       <div className="flex-1 bg-TrivvyaBlue justify-center items-center">

@@ -8,6 +8,8 @@ interface quizState {
   questions: Array<{ question: string; answer: string }>;
   question: string;
   loading: boolean;
+  score: number;
+  triesLeft: number;
 }
 
 const initialState: quizState = {
@@ -18,6 +20,8 @@ const initialState: quizState = {
   questions: [],
   question: "",
   loading: false,
+  score: 0,
+  triesLeft: 3,
 };
 
 const trivvyaSlice = createSlice({
@@ -72,6 +76,12 @@ const trivvyaSlice = createSlice({
     ) => {
       state.questions = action.payload;
     },
+    decreaseTry: (state) => {
+      state.triesLeft -= 1;
+    },
+    resetTries: (state) => {
+      state.triesLeft = 3;
+    },
   },
 });
 
@@ -83,6 +93,8 @@ export const {
   setQuestion,
   setQuestions,
   setLoading,
+  decreaseTry,
+  resetTries,
 } = trivvyaSlice.actions;
 
 export default trivvyaSlice.reducer;

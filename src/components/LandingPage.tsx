@@ -1,8 +1,15 @@
 import PlayButton from "../../Assets/Svgs/PlayButton";
 import Trivvya from "../../Assets/Svgs/Trivvya";
 import { Link } from "react-router-dom";
-
+import { useAppDispatch } from "../../hooks/hooks";
+import { useEffect } from "react";
+import { resetTries } from "../../store/TrivvyaSlice";
 function LandingPage() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(resetTries());
+  }, []);
   return (
     <div className="flex flex-col bg-TrivvyaBlue items-center justify-center min-h-screen px-10">
       <Trivvya className="mb-8 max-w-3xl" />

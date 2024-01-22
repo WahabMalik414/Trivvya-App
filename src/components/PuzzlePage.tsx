@@ -8,7 +8,7 @@ import Home from "../../Assets/Svgs/Home";
 import Puzzle from "../../Assets/Svgs/Puzzle";
 import Answer from "../../Assets/Svgs/Answer";
 import ConfettiExplosion from "react-confetti-explosion";
-
+import Modal from "../../utils/GameoverModal";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import {
@@ -21,6 +21,7 @@ import {
 import generateApiRequest from "../../utils/generateApiRequest";
 export default function PuzzlePage() {
   const [isExploding, setIsExploding] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const questions = useAppSelector((state) => state.quiz.questions);
   const displayAnswer = useAppSelector((state) => state.quiz.displayAnswer);
@@ -131,8 +132,7 @@ export default function PuzzlePage() {
   const handleSolvePuzzle = () => {
     dispatch(setDisplayAnswer(trueAnswer));
     setTimeout(() => {
-      alert("game over!");
-      navigate("/");
+      setShowModal(true);
     }, 1500);
   };
   if (loading) {
@@ -141,6 +141,7 @@ export default function PuzzlePage() {
     return (
       <>
         <div className="flex  min-h-screen">
+          {showModal && <Modal />}
           <div className="flex flex-col bg-TrivvyaBlue ">
             <div className="flex md:gap-x-5 justify-center mb-3">
               <Category

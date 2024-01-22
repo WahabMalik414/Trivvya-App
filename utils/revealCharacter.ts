@@ -1,11 +1,10 @@
 // useRevealCharacter.js
 
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
-import { setDisplayAnswer } from "../store/TrivvyaSlice";
+import { setDisplayAnswer, decreaseTry } from "../store/TrivvyaSlice";
 
 const UseRevealCharacter = () => {
   const trueAnswer = useAppSelector((state) => state.quiz.trueAnswer);
-
   const dispatch = useAppDispatch();
 
   const revealCharacter = (character: string) => {
@@ -14,6 +13,8 @@ const UseRevealCharacter = () => {
       console.log("in true answer");
 
       dispatch(setDisplayAnswer(character));
+    } else {
+      dispatch(decreaseTry());
     }
   };
 
