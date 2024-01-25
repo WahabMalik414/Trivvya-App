@@ -1,5 +1,3 @@
-//TODO: Very important: 1) fetch new data once the array has exhausted. 2)utils 3)further functionality.
-
 import { useEffect, useState } from "react";
 import he from "he";
 import Keyboard from "./Keyboard";
@@ -87,28 +85,21 @@ export default function PuzzlePage() {
   };
   const handleAnswerMCQ = () => {
     dispatch(setMcqModel(true));
-    console.log("MCQ");
   };
   const handlePuzzleSolved = () => {
-    console.log("Successfully solved");
     dispatch(increaseScore());
     setIsExploding(true);
-    // Find the index of the current question in the questions array
 
     setTimeout(() => {
       setIsExploding(false);
 
-      // Find the index of the current question in the questions array
       const currentIndex = questions.findIndex((q) => q.question === question);
 
-      // Check if there are more questions
       if (currentIndex < questions.length - 1) {
-        // Move to the next question
         const nextQuestion = questions[currentIndex + 1];
         dispatch(setQuestion(nextQuestion.question));
         dispatch(setTrueAnswer(nextQuestion.answer));
 
-        // Reset the displayAnswer state
         dispatch(
           setDisplayAnswer(
             nextQuestion.answer
@@ -129,7 +120,6 @@ export default function PuzzlePage() {
     if (displayAnswer === trueAnswer) {
       handlePuzzleSolved();
     }
-    console.log("here");
   }, [displayAnswer, trueAnswer, questions, question]);
 
   useEffect(() => {

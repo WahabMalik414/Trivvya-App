@@ -8,10 +8,7 @@ const UseRevealCharacter = () => {
   const dispatch = useAppDispatch();
 
   const revealCharacter = (character: string) => {
-    console.log("in reveal character");
     if (trueAnswer.includes(character)) {
-      console.log("in true answer");
-
       dispatch(setDisplayAnswer(character));
     } else {
       dispatch(decreaseTry());

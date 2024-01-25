@@ -33,7 +33,6 @@ const AnswerQuestionModal: React.FC = () => {
     try {
       const response = await fetch(generateApiRequest("1", "9", "easy"));
       const data = await response.json();
-      console.log(data.results[0]);
       setQuestionData(data.results[0]);
     } catch (error) {
       console.error("Error fetching puzzle data:", error);
@@ -58,25 +57,16 @@ const AnswerQuestionModal: React.FC = () => {
     setSelectedAnswer(selectedAnswer);
     setIsCorrect(isCorrect);
 
-    console.log(`Selected Answer: ${selectedAnswer}`);
-    console.log(`Is Correct: ${isCorrect}`);
-
-    // Perform any other actions based on the user's answer (true or false)
-    // For example, increase tries or navigate to another page.
     if (isCorrect) {
       dispatch(increaseTry());
       setTimeout(() => {
         dispatch(setMcqModel(false));
       }, 1500);
-      // Handle correct answer logic
     } else {
       setTimeout(() => {
         dispatch(setMcqModel(false));
       }, 1500);
     }
-
-    // Close the modal
-    // navigate("/");
   };
 
   return (
@@ -98,9 +88,9 @@ const AnswerQuestionModal: React.FC = () => {
                 className={`btn-lg rounded-2xl ${
                   selectedAnswer === answer
                     ? isCorrect
-                      ? "bg-green-500" // Green for correct answer
-                      : "bg-red-500" // Red for incorrect answer
-                    : "bg-blue-500" // Blue for other answers
+                      ? "bg-green-500"
+                      : "bg-red-500"
+                    : "bg-blue-500"
                 } text-white mb-2`}
                 onClick={() => handleAnswerSelection(answer)}
               >
