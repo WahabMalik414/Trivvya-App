@@ -10,6 +10,7 @@ interface quizState {
   loading: boolean;
   score: number;
   triesLeft: number;
+  showMcqModal: boolean;
 }
 
 const initialState: quizState = {
@@ -22,6 +23,7 @@ const initialState: quizState = {
   loading: false,
   score: 0,
   triesLeft: 3,
+  showMcqModal: false,
 };
 
 const trivvyaSlice = createSlice({
@@ -82,6 +84,18 @@ const trivvyaSlice = createSlice({
     resetTries: (state) => {
       state.triesLeft = 3;
     },
+    increaseTry: (state) => {
+      state.triesLeft += 1;
+    },
+    setMcqModel: (state, action: PayloadAction<boolean>) => {
+      state.showMcqModal = action.payload;
+    },
+    increaseScore: (state) => {
+      state.score += 1;
+    },
+    resetScore: (state) => {
+      state.score = 0;
+    },
   },
 });
 
@@ -95,6 +109,10 @@ export const {
   setLoading,
   decreaseTry,
   resetTries,
+  increaseTry,
+  setMcqModel,
+  increaseScore,
+  resetScore,
 } = trivvyaSlice.actions;
 
 export default trivvyaSlice.reducer;

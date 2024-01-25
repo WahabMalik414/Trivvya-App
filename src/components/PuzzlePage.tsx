@@ -17,8 +17,12 @@ import {
   setDisplayAnswer,
   setQuestions,
   setLoading,
+  setMcqModel,
+  increaseScore,
 } from "../../store/TrivvyaSlice";
 import generateApiRequest from "../../utils/generateApiRequest";
+import AnswerQuestionModal from "../../utils/AnswerQuestionModal";
+
 export default function PuzzlePage() {
   const [isExploding, setIsExploding] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -30,7 +34,9 @@ export default function PuzzlePage() {
   const category = useAppSelector((state) => state.quiz.category);
   const level = useAppSelector((state) => state.quiz.difficulty);
   const loading = useAppSelector((state) => state.quiz.loading);
-
+  const tries = useAppSelector((state) => state.quiz.triesLeft);
+  const showMcqModal = useAppSelector((state) => state.quiz.showMcqModal);
+  const score = useAppSelector((state) => state.quiz.score);
   const dispatch = useAppDispatch();
   type ApiResponse = {
     type: string;
@@ -43,7 +49,7 @@ export default function PuzzlePage() {
   const fetchPuzzleData = async () => {
     try {
       dispatch(setLoading(true));
-      const response = await fetch(generateApiRequest(category, level));
+      const response = await fetch(generateApiRequest("10", category, level));
       const data = await response.json();
       console.log(data);
       dispatch(setLoading(false));
@@ -79,8 +85,13 @@ export default function PuzzlePage() {
       dispatch(setLoading(false));
     }
   };
+  const handleAnswerMCQ = () => {
+    dispatch(setMcqModel(true));
+    console.log("MCQ");
+  };
   const handlePuzzleSolved = () => {
     console.log("Successfully solved");
+    dispatch(increaseScore());
     setIsExploding(true);
     // Find the index of the current question in the questions array
 
@@ -142,7 +153,8 @@ export default function PuzzlePage() {
       <>
         <div className="flex  min-h-screen">
           {showModal && <Modal />}
-          <div className="flex flex-col bg-TrivvyaBlue ">
+          {showMcqModal && <AnswerQuestionModal />}
+          <div className="flex flex-col bg-TrivvyaBlue w-screen">
             <div className="flex md:gap-x-5 justify-center mb-3">
               <Category
                 className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32"
@@ -150,7 +162,10 @@ export default function PuzzlePage() {
                   navigate("/category");
                 }}
               />
-              <Answer className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32" />
+              <Answer
+                className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32"
+                onClick={handleAnswerMCQ}
+              />
               <Puzzle
                 className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32"
                 onClick={() => {
@@ -169,9 +184,8 @@ export default function PuzzlePage() {
                 Solve the puzzle
               </p>
               <p className="text-white font-semibold text-xl md:text-2xl">
-                You get 1 consonant now! Answer Trivia questions to get more
-                letters. The sooner you can answer, the more points you score.
-                Get 3 questions wrong and game over.
+                you have {tries} wrong tries left. Answer a question from top
+                tab to get more tries. Enjoy the game!
               </p>
               <div className="justify-center items-center">
                 {isExploding && (
@@ -188,8 +202,7 @@ export default function PuzzlePage() {
                 {question}
               </p>
               <p className="text-white font-semibold text-xl md:text-2xl">
-                Level: Easy - 0 consonant. Click “Answer a question” button to
-                get more letters.
+                Score: {score}
               </p>
               <div className="text-white font-bold text-3xl md:text-6xl">
                 <p>

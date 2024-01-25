@@ -1,7 +1,7 @@
 import Button from "../../Assets/Svgs/Button";
 import UseRevealCharacter from "../../utils/revealCharacter";
 import { useAppSelector } from "../../hooks/hooks";
-import React, { useState } from "react";
+import { useState } from "react";
 import Modal from "../../utils/GameoverModal";
 function QwertyKeyboard() {
   const [showModal, setShowModal] = useState(false);
