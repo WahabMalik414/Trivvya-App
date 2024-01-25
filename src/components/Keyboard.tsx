@@ -3,9 +3,10 @@ import UseRevealCharacter from "../../utils/revealCharacter";
 import { useAppSelector } from "../../hooks/hooks";
 import { useState } from "react";
 import Modal from "../../utils/GameoverModal";
+
 function QwertyKeyboard() {
   const [showModal, setShowModal] = useState(false);
-
+  const loading = useAppSelector((state) => state.quiz.loading);
   const qwertyLayout = ["qwertyuiop", "asdfghjkl", "zxcvbnm"];
   const revealCharacter = UseRevealCharacter();
   const triesLeft = useAppSelector((state) => state.quiz.triesLeft);
@@ -28,6 +29,7 @@ function QwertyKeyboard() {
               key={index}
               text={letter}
               onClick={() => handleButtonClick(letter)}
+              disabled={loading}
               className="cursor-pointer mx-1 transition duration-300 ease-in-out transform hover:scale-125 h-9 w-9 md:h-20 md:w-20"
             />
           ))}

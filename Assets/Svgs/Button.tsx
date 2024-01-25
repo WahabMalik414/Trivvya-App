@@ -1,10 +1,22 @@
-interface buttonProp {
+interface ButtonProps {
   text: string;
   onClick?: () => void;
   className: string;
+  disabled: boolean;
 }
 
-function Button(props: buttonProp) {
+const Button: React.FC<ButtonProps> = ({
+  text,
+  onClick,
+  className,
+  disabled,
+}) => {
+  const handleClick = () => {
+    if (!disabled && onClick) {
+      onClick();
+    }
+  };
+
   return (
     <svg
       width="100%"
@@ -12,7 +24,9 @@ function Button(props: buttonProp) {
       viewBox="0 0 90 90"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      className={className}
+      onClick={handleClick}
+      style={{ cursor: disabled ? "not-allowed" : "pointer" }}
     >
       <path
         d="M45 90c24.853 0 45-20.147 45-45S69.853 0 45 0 0 20.147 0 45s20.147 45 45 45z"
@@ -39,13 +53,13 @@ function Button(props: buttonProp) {
         y="65%"
         fontSize="48px"
         fontWeight="600"
-        fill="#32c4cd"
+        fill={disabled ? "#CCCCCC" : "#32c4cd"} // Change fill color for disabled state
         textAnchor="middle"
       >
-        {props.text}
+        {text}
       </text>
     </svg>
   );
-}
+};
 
 export default Button;

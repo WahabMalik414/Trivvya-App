@@ -3,6 +3,7 @@ import LevelPage from "./LevelPage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import CategoryPage from "./CategoryPage";
 import PuzzlePage from "./PuzzlePage";
+import Error from "./ErrorPage";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: "/puzzle",
     element: <PuzzlePage />,
+  },
+  {
+    path: "/error",
+    element: <Error />,
   },
 ]);
 function App() {

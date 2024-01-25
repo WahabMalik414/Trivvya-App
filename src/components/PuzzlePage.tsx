@@ -81,8 +81,8 @@ export default function PuzzlePage() {
         console.log("No valid puzzle data found.");
       }
     } catch (error) {
-      console.error("Error fetching puzzle data:", error);
       dispatch(setLoading(false));
+      navigate("/error");
     }
   };
   const handleAnswerMCQ = () => {
@@ -146,80 +146,80 @@ export default function PuzzlePage() {
       setShowModal(true);
     }, 1500);
   };
-  if (loading) {
-    return <div>loading</div>;
-  } else {
-    return (
-      <>
-        <div className="flex  min-h-screen">
-          {showModal && <Modal />}
-          {showMcqModal && <AnswerQuestionModal />}
-          <div className="flex flex-col bg-TrivvyaBlue w-screen">
-            <div className="flex md:gap-x-5 justify-center mb-3">
-              <Category
-                className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32"
-                onClick={() => {
-                  navigate("/category");
-                }}
-              />
-              <Answer
-                className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32"
-                onClick={handleAnswerMCQ}
-              />
-              <Puzzle
-                className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32"
-                onClick={() => {
-                  handleSolvePuzzle();
-                }}
-              />
-              <Home
-                className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32"
-                onClick={() => {
-                  navigate("/");
-                }}
-              />
+  return (
+    <>
+      <div className="flex  min-h-screen">
+        {showModal && <Modal />}
+        {showMcqModal && <AnswerQuestionModal />}
+        <div className="flex flex-col bg-TrivvyaBlue w-screen">
+          <div className="flex md:gap-x-5 justify-center mb-3">
+            <Category
+              className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32"
+              onClick={() => {
+                navigate("/category");
+              }}
+            />
+            <Answer
+              className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32"
+              onClick={handleAnswerMCQ}
+            />
+            <Puzzle
+              className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32"
+              onClick={() => {
+                handleSolvePuzzle();
+              }}
+            />
+            <Home
+              className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32"
+              onClick={() => {
+                navigate("/");
+              }}
+            />
+          </div>
+          <div className="flex flex-col text-center md:px-10 gap-y-2">
+            <p className="text-white text-3xl md:text-5xl font-bold">
+              Solve the puzzle
+            </p>
+            <p className="text-white font-semibold text-xl md:text-2xl">
+              you have {tries} wrong tries left. Answer a question from top tab
+              to get more tries. Enjoy the game!
+            </p>
+            <div className="justify-center items-center">
+              {isExploding && (
+                <ConfettiExplosion
+                  force={0.8}
+                  duration={3000}
+                  particleCount={300}
+                  width={1600}
+                />
+              )}
             </div>
-            <div className="flex flex-col text-center md:px-10 gap-y-2">
-              <p className="text-white text-3xl md:text-5xl font-bold">
-                Solve the puzzle
-              </p>
-              <p className="text-white font-semibold text-xl md:text-2xl">
-                you have {tries} wrong tries left. Answer a question from top
-                tab to get more tries. Enjoy the game!
-              </p>
-              <div className="justify-center items-center">
-                {isExploding && (
-                  <ConfettiExplosion
-                    force={0.8}
-                    duration={3000}
-                    particleCount={300}
-                    width={1600}
-                  />
-                )}
-              </div>
-              <p className="text-white text-3xl md:text-5xl font-bold">CLUE</p>
-              <p className="text-white font-semibold text-xl md:text-2xl">
-                {question}
-              </p>
-              <p className="text-white font-semibold text-xl md:text-2xl">
-                Score: {score}
-              </p>
-              <div className="text-white font-bold text-3xl md:text-6xl">
-                <p>
-                  {/* {Array.from(answer).map((letter, index) => (
+            <p className="text-white text-3xl md:text-5xl font-bold">CLUE</p>
+            <p className="text-white font-semibold text-xl md:text-2xl">
+              {loading ? (
+                <span className="loading loading-spinner loading-lg"></span>
+              ) : (
+                question
+              )}
+            </p>
+            <p className="text-white font-semibold text-xl md:text-2xl">
+              Score: {score}
+            </p>
+            <div className="text-white font-bold text-3xl md:text-6xl">
+              <p>
+                {/* {Array.from(answer).map((letter, index) => (
               <span key={index}>{revealCharacter(letter)}</span>
             ))} */}
 
-                  {displayAnswer}
-                </p>
-              </div>
-              <div className="flex justify-center mt-5">
-                <Keyboard />
-              </div>
+                {displayAnswer}
+              </p>
+            </div>
+            <div className="flex justify-center mt-5">
+              <Keyboard />
             </div>
           </div>
         </div>
-      </>
-    );
-  }
+      </div>
+    </>
+  );
 }
