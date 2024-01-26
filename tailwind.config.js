@@ -11,6 +11,7 @@ export default {
     extend: {
       colors: {
         TrivvyaBlue: "#32c4cd",
+        chipBlue: "#328fa8",
       },
     },
   },

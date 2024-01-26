@@ -1,8 +1,15 @@
 type classNameProp = {
   className?: string;
   onClick?: () => void;
+  disabled: boolean;
 };
-function Answer(props: classNameProp) {
+const Answer: React.FC<classNameProp> = ({ className, onClick, disabled }) => {
+  const handleClick = () => {
+    if (!disabled && onClick) {
+      onClick();
+    }
+  };
+
   return (
     <svg
       width={120}
@@ -10,7 +17,9 @@ function Answer(props: classNameProp) {
       viewBox="0 0 148 148"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      className={className}
+      onClick={handleClick}
+      style={{ cursor: disabled ? "not-allowed" : "pointer" }}
     >
       <path
         d="M74 148c40.869 0 74-33.131 74-74 0-40.87-33.131-74-74-74C33.13 0 0 33.13 0 74c0 40.869 33.13 74 74 74z"
@@ -36,6 +45,6 @@ function Answer(props: classNameProp) {
       />
     </svg>
   );
-}
+};
 
 export default Answer;

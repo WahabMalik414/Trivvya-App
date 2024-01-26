@@ -7,19 +7,18 @@ import Modal from "../../utils/GameoverModal";
 function QwertyKeyboard() {
   const [showModal, setShowModal] = useState(false);
   const loading = useAppSelector((state) => state.quiz.loading);
-  const qwertyLayout = ["qwertyuiop", "asdfghjkl", "zxcvbnm"];
+  const qwertyLayout = ["0123456789", "qwertyuiop", "asdfghjkl", "zxcvbnm-."];
   const revealCharacter = UseRevealCharacter();
   const triesLeft = useAppSelector((state) => state.quiz.triesLeft);
   const handleButtonClick = (letter: string) => {
     if (triesLeft === 0) {
       setShowModal(true);
-      //alert("game over");
     } else {
       revealCharacter(letter);
     }
   };
   return (
-    <div className="flex flex-col h-28 gap-y-2">
+    <div className="flex flex-col h-28 gap-y-1">
       {showModal && <Modal />}
 
       {qwertyLayout.map((row, rowIndex) => (

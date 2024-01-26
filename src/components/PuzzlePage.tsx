@@ -148,16 +148,19 @@ export default function PuzzlePage() {
               onClick={() => {
                 navigate("/category");
               }}
+              disabled={loading}
             />
             <Answer
               className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32"
               onClick={handleAnswerMCQ}
+              disabled={loading}
             />
             <Puzzle
               className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32"
               onClick={() => {
                 handleSolvePuzzle();
               }}
+              disabled={loading}
             />
             <Home
               className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32"
@@ -171,8 +174,7 @@ export default function PuzzlePage() {
               Solve the puzzle
             </p>
             <p className="text-white font-semibold text-xl md:text-2xl">
-              you have {tries} wrong tries left. Answer a question from top tab
-              to get more tries. Enjoy the game!
+              Answer a question from top tab to get more tries. Enjoy the game!
             </p>
             <div className="justify-center items-center">
               {isExploding && (
@@ -192,17 +194,19 @@ export default function PuzzlePage() {
                 question
               )}
             </p>
-            <p className="text-white font-semibold text-xl md:text-2xl">
-              Score: {score}
-            </p>
+            {/* <p className="text-white font-semibold text-xl md:text-2xl">
+              {tries} wrong tries left&nbsp;&nbsp;Score: {score}
+            </p> */}
+            <div className="flex flex-row justify-center gap-x-5 pr-10">
+              <div className="w-fit items-center whitespace-nowrap rounded-lg bg-chipBlue py-1.5 px-3 font-sans text-lg uppercase text-white">
+                <span className="">Wrong tries left: {tries}</span>
+              </div>
+              <div className="w-fit items-center whitespace-nowrap rounded-lg bg-chipBlue py-1.5 px-3 font-sans text-lg uppercase text-white">
+                <span className="">Score: {score}</span>
+              </div>
+            </div>
             <div className="text-white font-bold text-3xl md:text-6xl">
-              <p>
-                {/* {Array.from(answer).map((letter, index) => (
-              <span key={index}>{revealCharacter(letter)}</span>
-            ))} */}
-
-                {displayAnswer}
-              </p>
+              <p>{displayAnswer}</p>
             </div>
             <div className="flex justify-center mt-5">
               <Keyboard />
