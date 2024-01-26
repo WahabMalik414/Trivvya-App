@@ -193,14 +193,11 @@ export default function PuzzlePage() {
                 question
               )}
             </p>
-            {/* <p className="text-white font-semibold text-xl md:text-2xl">
-              {tries} wrong tries left&nbsp;&nbsp;Score: {score}
-            </p> */}
-            <div className="flex flex-row justify-center gap-x-5 pr-10">
-              <div className="w-fit items-center whitespace-nowrap rounded-lg bg-chipBlue py-1.5 px-3 font-sans text-lg uppercase text-white">
+            <div className="flex flex-col md:flex-row md:justify-center items-center gap-y-4 md:gap-x-5 md:pr-10">
+              <div className="w-fit items-center justify-center whitespace-nowrap rounded-lg bg-chipBlue py-1.5 px-3 font-sans text-lg uppercase text-white">
                 <span className="">Wrong tries left: {tries}</span>
               </div>
-              <div className="w-fit items-center whitespace-nowrap rounded-lg bg-chipBlue py-1.5 px-3 font-sans text-lg uppercase text-white">
+              <div className="w-fit items-center justify-center whitespace-nowrap rounded-lg bg-chipBlue py-1.5 px-3 font-sans text-lg uppercase text-white">
                 <span className="">Score: {score}</span>
               </div>
             </div>

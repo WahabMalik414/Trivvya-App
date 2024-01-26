@@ -18,18 +18,21 @@ function QwertyKeyboard() {
     }
   };
   return (
-    <div className="flex flex-col h-28 gap-y-1">
+    <div className="flex flex-row md:flex-col gap-y-1">
       {showModal && <Modal />}
 
       {qwertyLayout.map((row, rowIndex) => (
-        <div key={rowIndex} className="flex justify-center">
+        <div
+          key={rowIndex}
+          className="flex flex-col md:flex-row justify-center"
+        >
           {row.split("").map((letter, index) => (
             <Button
               key={index}
               text={letter}
               onClick={() => handleButtonClick(letter)}
               disabled={loading}
-              className="cursor-pointer mx-1 transition duration-300 ease-in-out transform hover:scale-125 h-9 w-9 md:h-20 md:w-20"
+              className="cursor-pointer mx-1 transition duration-300 ease-in-out transform hover:scale-125 h-20 w-20 md:h-20 md:w-20"
             />
           ))}
         </div>
