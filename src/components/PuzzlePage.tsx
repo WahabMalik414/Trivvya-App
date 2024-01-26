@@ -49,7 +49,6 @@ export default function PuzzlePage() {
       dispatch(setLoading(true));
       const response = await fetch(generateApiRequest("10", category, level));
       const data = await response.json();
-      console.log(data);
       dispatch(setLoading(false));
       const puzzleData = data.results.filter((result: ApiResponse) => {
         const answer = he.decode(result.correct_answer.toLowerCase());

@@ -35,25 +35,20 @@ const trivvyaSlice = createSlice({
     },
 
     setDifficulty: (state, action: PayloadAction<string>) => {
-      console.log(action.payload);
       state.difficulty = action.payload;
     },
     setCategory: (state, action: PayloadAction<string>) => {
-      console.log(action.payload);
       state.category = action.payload;
     },
     setTrueAnswer: (state, action) => {
       state.trueAnswer = action.payload;
     },
     setDisplayAnswer: (state, action: PayloadAction<string>) => {
-      console.log(action.payload);
-      console.log(state.trueAnswer);
       if (action.payload === state.trueAnswer) {
         state.displayAnswer = state.trueAnswer;
         return;
       }
       if (action.payload === "initialize") {
-        console.log("is zero");
         const newDisplayAnswer = Array.from(state.trueAnswer)
           .map((char) => (char === " " ? " " : "_"))
           .join("");
