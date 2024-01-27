@@ -5,6 +5,7 @@ import Category from "../../Assets/Svgs/Category";
 import Home from "../../Assets/Svgs/Home";
 import Puzzle from "../../Assets/Svgs/Puzzle";
 import Answer from "../../Assets/Svgs/Answer";
+
 import ConfettiExplosion from "react-confetti-explosion";
 import Modal from "../../utils/GameoverModal";
 import { useNavigate } from "react-router-dom";
@@ -20,10 +21,13 @@ import {
 } from "../../store/TrivvyaSlice";
 import generateApiRequest from "../../utils/generateApiRequest";
 import AnswerQuestionModal from "../../utils/AnswerQuestionModal";
-
+import Loading from "./Loading";
+import RetriesCount from "./RetryCount";
+import Score from "./Score";
 export default function PuzzlePage() {
   const [isExploding, setIsExploding] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [loadingType, setLoadingType] = useState(0);
   const navigate = useNavigate();
   const questions = useAppSelector((state) => state.quiz.questions);
   const displayAnswer = useAppSelector((state) => state.quiz.displayAnswer);
@@ -32,9 +36,7 @@ export default function PuzzlePage() {
   const category = useAppSelector((state) => state.quiz.category);
   const level = useAppSelector((state) => state.quiz.difficulty);
   const loading = useAppSelector((state) => state.quiz.loading);
-  const tries = useAppSelector((state) => state.quiz.triesLeft);
   const showMcqModal = useAppSelector((state) => state.quiz.showMcqModal);
-  const score = useAppSelector((state) => state.quiz.score);
   const dispatch = useAppDispatch();
   type ApiResponse = {
     type: string;
@@ -47,7 +49,7 @@ export default function PuzzlePage() {
   const fetchPuzzleData = async () => {
     try {
       dispatch(setLoading(true));
-      const response = await fetch(generateApiRequest("10", category, level));
+      const response = await fetch(generateApiRequest("50", category, level));
       const data = await response.json();
       dispatch(setLoading(false));
       const puzzleData = data.results.filter((result: ApiResponse) => {
@@ -70,10 +72,12 @@ export default function PuzzlePage() {
         );
         dispatch(setQuestions(newQuestions));
 
-        // Set the first question initially
         const { question, answer } = newQuestions[0];
         dispatch(setQuestion(question));
         dispatch(setTrueAnswer(answer));
+        if (loadingType === 0) {
+          setLoadingType(1);
+        }
       } else {
         console.log("No valid puzzle data found.");
       }
@@ -135,6 +139,12 @@ export default function PuzzlePage() {
       setShowModal(true);
     }, 1500);
   };
+
+  if (loading) {
+    if (loadingType === 0) {
+      return <Loading />;
+    }
+  }
   return (
     <>
       <div className="flex  min-h-screen">
@@ -194,12 +204,8 @@ export default function PuzzlePage() {
               )}
             </p>
             <div className="flex flex-col md:flex-row md:justify-center items-center gap-y-4 md:gap-x-5 md:pr-10">
-              <div className="w-fit items-center justify-center whitespace-nowrap rounded-lg bg-chipBlue py-1.5 px-3 font-sans text-lg uppercase text-white">
-                <span className="">Wrong tries left: {tries}</span>
-              </div>
-              <div className="w-fit items-center justify-center whitespace-nowrap rounded-lg bg-chipBlue py-1.5 px-3 font-sans text-lg uppercase text-white">
-                <span className="">Score: {score}</span>
-              </div>
+              <RetriesCount />
+              <Score />
             </div>
             <div className="text-white font-bold text-3xl md:text-6xl">
               <p>{displayAnswer}</p>
