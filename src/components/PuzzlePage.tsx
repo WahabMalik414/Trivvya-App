@@ -49,7 +49,7 @@ export default function PuzzlePage() {
   const fetchPuzzleData = async () => {
     try {
       dispatch(setLoading(true));
-      const response = await fetch(generateApiRequest("50", category, level));
+      const response = await fetch(generateApiRequest("10", category, level));
       const data = await response.json();
       dispatch(setLoading(false));
       const puzzleData = data.results.filter((result: ApiResponse) => {
@@ -151,34 +151,34 @@ export default function PuzzlePage() {
         {showModal && <Modal />}
         {showMcqModal && <AnswerQuestionModal />}
         <div className="flex flex-col bg-TrivvyaBlue w-screen">
-          <div className="flex md:gap-x-5 justify-center mb-3">
+          <div className="flex md:gap-x-5 justify-center mb-2">
             <Category
-              className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32"
+              className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-28 md:h-28"
               onClick={() => {
                 navigate("/category");
               }}
               disabled={loading}
             />
             <Answer
-              className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32"
+              className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-28 md:h-28"
               onClick={handleAnswerMCQ}
               disabled={loading}
             />
             <Puzzle
-              className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32"
+              className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-28 md:h-28"
               onClick={() => {
                 handleSolvePuzzle();
               }}
               disabled={loading}
             />
             <Home
-              className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-32"
+              className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-28 md:h-28"
               onClick={() => {
                 navigate("/");
               }}
             />
           </div>
-          <div className="flex flex-col text-center md:px-10 gap-y-2">
+          <div className="flex flex-col text-center md:px-10 gap-y-1">
             <p className="text-white text-3xl md:text-5xl font-bold">
               Solve the puzzle
             </p>
@@ -195,15 +195,15 @@ export default function PuzzlePage() {
                 />
               )}
             </div>
-            <p className="text-white text-3xl md:text-5xl font-bold">CLUE</p>
-            <p className="text-white font-semibold text-xl md:text-2xl">
+            <p className="text-white text-3xl md:text-3xl font-bold">CLUE</p>
+            <p className="text-white font-semibold text-xl md:text-2xl bg-chipBlue m-auto px-14 rounded-full py-2">
               {loading ? (
                 <span className="loading loading-spinner loading-lg"></span>
               ) : (
                 question
               )}
             </p>
-            <div className="flex flex-col md:flex-row md:justify-center items-center gap-y-4 md:gap-x-5 md:pr-10">
+            <div className="flex flex-col md:flex-row md:justify-center items-center gap-y-4 md:gap-x-5 md:pr-10 md:mt-2">
               <RetriesCount />
               <Score />
             </div>
