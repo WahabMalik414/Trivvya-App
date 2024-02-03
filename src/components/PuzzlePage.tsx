@@ -23,10 +23,14 @@ import AnswerQuestionModal from "../../utils/AnswerQuestionModal";
 import Loading from "./Loading";
 import RetriesCount from "./RetryCount";
 import Score from "./Score";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function PuzzlePage() {
   const [isExploding, setIsExploding] = useState(false);
   const [loadingType, setLoadingType] = useState(0);
+  const [isAnswerDisabled, setIsAnswerDisabled] = useState(true);
+
   const navigate = useNavigate();
   const questions = useAppSelector((state) => state.quiz.questions);
   const displayAnswer = useAppSelector((state) => state.quiz.displayAnswer);
@@ -90,8 +94,18 @@ export default function PuzzlePage() {
   };
 
   const handleAnswerMCQ = () => {
+    if (isAnswerDisabled) {
+      toast.info("You can use this tool after 10 seconds!!!", {
+        autoClose: 5000,
+        pauseOnHover: false,
+      });
+      return;
+    }
+    setIsAnswerDisabled(true);
+
     dispatch(setMcqModel(true));
   };
+
   const handlePuzzleSolved = () => {
     if (gameOver) {
       dispatch(setDisplayAnswer(trueAnswer));
@@ -140,6 +154,19 @@ export default function PuzzlePage() {
     dispatch(setDisplayAnswer("initialize"));
   }, [trueAnswer]);
 
+  useEffect(() => {
+    if (!isAnswerDisabled) {
+      toast.success("You can use Answer a question tool now!!!", {
+        autoClose: 5000,
+        pauseOnHover: false,
+      });
+      return;
+    }
+    setTimeout(() => {
+      setIsAnswerDisabled(false);
+    }, 10000);
+  }, [isAnswerDisabled]);
+
   const handleSolvePuzzle = () => {
     dispatch(setDisplayAnswer(trueAnswer));
     dispatch(setGameOver(true));
@@ -164,11 +191,13 @@ export default function PuzzlePage() {
               }}
               disabled={loading}
             />
-            <Answer
-              className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-28 md:h-28"
-              onClick={handleAnswerMCQ}
-              disabled={loading}
-            />
+            <div>
+              <Answer
+                className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-28 md:h-28"
+                onClick={handleAnswerMCQ}
+                disabled={loading || isAnswerDisabled}
+              />
+            </div>
             <Puzzle
               className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-28 md:h-28"
               onClick={() => {
@@ -222,6 +251,7 @@ export default function PuzzlePage() {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 }
