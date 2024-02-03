@@ -11,6 +11,7 @@ interface quizState {
   score: number;
   triesLeft: number;
   showMcqModal: boolean;
+  gameOver: boolean;
 }
 
 const initialState: quizState = {
@@ -24,6 +25,7 @@ const initialState: quizState = {
   score: 0,
   triesLeft: 3,
   showMcqModal: false,
+  gameOver: false,
 };
 
 const trivvyaSlice = createSlice({
@@ -53,6 +55,7 @@ const trivvyaSlice = createSlice({
           .map((char) => (char === " " ? " " : "_"))
           .join("");
         state.displayAnswer = newDisplayAnswer;
+        return;
       } else {
         const newDisplayAnswer = state.displayAnswer
           .split("")
@@ -91,6 +94,25 @@ const trivvyaSlice = createSlice({
     resetScore: (state) => {
       state.score = 0;
     },
+    setGameOver: (state, action: PayloadAction<boolean>) => {
+      state.gameOver = action.payload;
+    },
+    resetGameOver: (state) => {
+      state.gameOver = false;
+    },
+    resetState: (state) => {
+      (state.difficulty = ""),
+        (state.category = ""),
+        (state.trueAnswer = "initial"),
+        (state.displayAnswer = ""),
+        (state.questions = []),
+        (state.question = ""),
+        (state.loading = false),
+        (state.score = 0),
+        (state.triesLeft = 3),
+        (state.showMcqModal = false),
+        (state.gameOver = false);
+    },
   },
 });
 
@@ -108,6 +130,9 @@ export const {
   setMcqModel,
   increaseScore,
   resetScore,
+  setGameOver,
+  resetGameOver,
+  resetState,
 } = trivvyaSlice.actions;
 
 export default trivvyaSlice.reducer;

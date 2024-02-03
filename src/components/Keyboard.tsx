@@ -1,25 +1,31 @@
 import Button from "../../Assets/Svgs/Button";
 import UseRevealCharacter from "../../utils/revealCharacter";
-import { useAppSelector } from "../../hooks/hooks";
-import { useState } from "react";
+import { useAppSelector, useAppDispatch } from "../../hooks/hooks";
+import { setDisplayAnswer, setGameOver } from "../../store/TrivvyaSlice";
+
 import Modal from "../../utils/GameoverModal";
 
 function QwertyKeyboard() {
-  const [showModal, setShowModal] = useState(false);
+  const dispatch = useAppDispatch();
   const loading = useAppSelector((state) => state.quiz.loading);
+  const trueAnswer = useAppSelector((state) => state.quiz.trueAnswer);
+  const gameOver = useAppSelector((state) => state.quiz.gameOver);
   const qwertyLayout = ["0123456789", "qwertyuiop", "asdfghjkl", "zxcvbnm-."];
   const revealCharacter = UseRevealCharacter();
   const triesLeft = useAppSelector((state) => state.quiz.triesLeft);
+
   const handleButtonClick = (letter: string) => {
-    if (triesLeft === 0) {
-      setShowModal(true);
+    if (triesLeft === 0 || gameOver) {
+      dispatch(setDisplayAnswer(trueAnswer));
+      dispatch(setGameOver(true));
     } else {
       revealCharacter(letter);
     }
   };
+
   return (
     <div className="flex flex-row md:flex-col gap-y-1">
-      {showModal && <Modal />}
+      {gameOver && <Modal />}
 
       {qwertyLayout.map((row, rowIndex) => (
         <div

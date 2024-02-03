@@ -39,16 +39,20 @@ const AnswerQuestionModal: React.FC = () => {
     }
   };
 
-  const shuffleAnswers = (answers: string[]) => {
+  const shuffleAnswers = (answers: string[], buttonPressed: boolean) => {
     // Fisher-Yates shuffle algorithm
     const shuffledAnswers: string[] = [...answers];
-    for (let i = shuffledAnswers.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffledAnswers[i], shuffledAnswers[j]] = [
-        shuffledAnswers[j],
-        shuffledAnswers[i],
-      ];
+
+    if (!buttonPressed) {
+      for (let i = shuffledAnswers.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffledAnswers[i], shuffledAnswers[j]] = [
+          shuffledAnswers[j],
+          shuffledAnswers[i],
+        ];
+      }
     }
+
     return shuffledAnswers;
   };
 
@@ -79,10 +83,13 @@ const AnswerQuestionModal: React.FC = () => {
             {he.decode(questionData?.question || "")}
           </p>
           <div className="flex flex-col mt-4">
-            {shuffleAnswers([
-              ...(questionData?.incorrect_answers || []),
-              questionData?.correct_answer || " ",
-            ]).map((answer, index) => (
+            {shuffleAnswers(
+              [
+                ...(questionData?.incorrect_answers || []),
+                questionData?.correct_answer || " ",
+              ],
+              true
+            ).map((answer, index) => (
               <button
                 key={index}
                 className={`btn-lg rounded-2xl ${

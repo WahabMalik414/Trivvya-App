@@ -5,9 +5,7 @@ import Category from "../../Assets/Svgs/Category";
 import Home from "../../Assets/Svgs/Home";
 import Puzzle from "../../Assets/Svgs/Puzzle";
 import Answer from "../../Assets/Svgs/Answer";
-
 import ConfettiExplosion from "react-confetti-explosion";
-import Modal from "../../utils/GameoverModal";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import {
@@ -18,15 +16,16 @@ import {
   setLoading,
   setMcqModel,
   increaseScore,
+  setGameOver,
 } from "../../store/TrivvyaSlice";
 import generateApiRequest from "../../utils/generateApiRequest";
 import AnswerQuestionModal from "../../utils/AnswerQuestionModal";
 import Loading from "./Loading";
 import RetriesCount from "./RetryCount";
 import Score from "./Score";
+
 export default function PuzzlePage() {
   const [isExploding, setIsExploding] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const [loadingType, setLoadingType] = useState(0);
   const navigate = useNavigate();
   const questions = useAppSelector((state) => state.quiz.questions);
@@ -37,6 +36,9 @@ export default function PuzzlePage() {
   const level = useAppSelector((state) => state.quiz.difficulty);
   const loading = useAppSelector((state) => state.quiz.loading);
   const showMcqModal = useAppSelector((state) => state.quiz.showMcqModal);
+  const triesLeft = useAppSelector((state) => state.quiz.triesLeft);
+  const gameOver = useAppSelector((state) => state.quiz.gameOver);
+
   const dispatch = useAppDispatch();
   type ApiResponse = {
     type: string;
@@ -46,6 +48,7 @@ export default function PuzzlePage() {
     correct_answer: string;
     incorrect_answers: string[];
   };
+
   const fetchPuzzleData = async () => {
     try {
       dispatch(setLoading(true));
@@ -56,7 +59,6 @@ export default function PuzzlePage() {
         const answer = he.decode(result.correct_answer.toLowerCase());
         return answer.split(" ").length === 1 && !/\d/.test(answer);
       });
-
       if (puzzleData.length > 0) {
         const newQuestions = puzzleData.map(
           ({
@@ -86,41 +88,46 @@ export default function PuzzlePage() {
       navigate("/error");
     }
   };
+
   const handleAnswerMCQ = () => {
     dispatch(setMcqModel(true));
   };
   const handlePuzzleSolved = () => {
-    dispatch(increaseScore());
-    setIsExploding(true);
-
-    setTimeout(() => {
-      setIsExploding(false);
-
-      const currentIndex = questions.findIndex((q) => q.question === question);
-
-      if (currentIndex < questions.length - 1) {
-        const nextQuestion = questions[currentIndex + 1];
-        dispatch(setQuestion(nextQuestion.question));
-        dispatch(setTrueAnswer(nextQuestion.answer));
-
-        dispatch(
-          setDisplayAnswer(
-            nextQuestion.answer
-              .split("")
-              .map((char) => (char === " " ? " " : "_"))
-              .join("")
-          )
+    if (gameOver) {
+      dispatch(setDisplayAnswer(trueAnswer));
+      return;
+    } else {
+      dispatch(increaseScore());
+      setIsExploding(true);
+      setTimeout(() => {
+        setIsExploding(false);
+        const currentIndex = questions.findIndex(
+          (q) => q.question === question
         );
-      } else {
-        console.log(
-          "All questions have been answered. Fetching next questions."
-        );
-        fetchPuzzleData();
-      }
-    }, 3000);
+        if (currentIndex < questions.length - 1) {
+          const nextQuestion = questions[currentIndex + 1];
+          dispatch(setQuestion(nextQuestion.question));
+          dispatch(setTrueAnswer(nextQuestion.answer));
+          dispatch(
+            setDisplayAnswer(
+              nextQuestion.answer
+                .split("")
+                .map((char) => (char === " " ? " " : "_"))
+                .join("")
+            )
+          );
+        } else {
+          console.log(
+            "All questions have been answered. Fetching next questions."
+          );
+          fetchPuzzleData();
+        }
+      }, 3000);
+    }
   };
+
   useEffect(() => {
-    if (displayAnswer === trueAnswer) {
+    if (displayAnswer === trueAnswer && gameOver == false) {
       handlePuzzleSolved();
     }
   }, [displayAnswer, trueAnswer, questions, question]);
@@ -135,9 +142,7 @@ export default function PuzzlePage() {
 
   const handleSolvePuzzle = () => {
     dispatch(setDisplayAnswer(trueAnswer));
-    setTimeout(() => {
-      setShowModal(true);
-    }, 1500);
+    dispatch(setGameOver(true));
   };
 
   if (loading) {
@@ -145,10 +150,10 @@ export default function PuzzlePage() {
       return <Loading />;
     }
   }
+
   return (
     <>
       <div className="flex  min-h-screen">
-        {showModal && <Modal />}
         {showMcqModal && <AnswerQuestionModal />}
         <div className="flex flex-col bg-TrivvyaBlue w-screen">
           <div className="flex md:gap-x-5 justify-center mb-2">
@@ -168,6 +173,7 @@ export default function PuzzlePage() {
               className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-28 md:h-28"
               onClick={() => {
                 handleSolvePuzzle();
+                dispatch(setGameOver(true));
               }}
               disabled={loading}
             />
@@ -186,7 +192,7 @@ export default function PuzzlePage() {
               Answer a question from top tab to get more tries. Enjoy the game!
             </p>
             <div className="justify-center items-center">
-              {isExploding && (
+              {isExploding && triesLeft !== 0 && (
                 <ConfettiExplosion
                   force={0.8}
                   duration={3000}
