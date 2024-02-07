@@ -13,7 +13,7 @@ const Modal: React.FC = () => {
   }, []);
 
   return (
-    <dialog id="my_modal_1" className="modal items-end pb-32">
+    <dialog id="my_modal_1" className="modal items-end md:pb-32">
       <div className="modal-box">
         <h3 className="font-bold text-3xl text-center">Game over!</h3>
         <p className="py-4 text-center">Play again? </p>

@@ -189,7 +189,7 @@ export default function PuzzlePage() {
               onClick={() => {
                 navigate("/category");
               }}
-              disabled={loading}
+              disabled={loading || isAnswerDisabled}
             />
             <div>
               <Answer

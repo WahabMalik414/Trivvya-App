@@ -16,7 +16,7 @@ const Answer: React.FC<classNameProp> = ({ className, onClick, disabled }) => {
       width={120}
       height={120}
       viewBox="0 0 148 148"
-      fill={disabled ? "#CCCCCC" : "#912948"} // Change fill color for disabled state
+      fill={disabled ? "#CCCCCC" : "#912948"}
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       onClick={handleClick}
