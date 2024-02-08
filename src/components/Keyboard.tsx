@@ -15,7 +15,7 @@ function QwertyKeyboard() {
   const triesLeft = useAppSelector((state) => state.quiz.triesLeft);
 
   const handleButtonClick = (letter: string) => {
-    if (triesLeft === 0 || gameOver) {
+    if (triesLeft === 1 || gameOver) {
       dispatch(setDisplayAnswer(trueAnswer));
       dispatch(setGameOver(true));
     } else {

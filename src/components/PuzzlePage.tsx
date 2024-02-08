@@ -221,7 +221,7 @@ export default function PuzzlePage() {
               Answer a question from top tab to get more tries. Enjoy the game!
             </p>
             <div className="justify-center items-center">
-              {isExploding && triesLeft !== 0 && (
+              {isExploding && triesLeft !== 1 && (
                 <ConfettiExplosion
                   force={0.8}
                   duration={3000}
