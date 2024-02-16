@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { increaseTry, setMcqModel } from "../store/TrivvyaSlice";
+import { increaseTry, setMcqModel,setIsAnswerModalDisabled } from "../store/TrivvyaSlice";
 import { useAppDispatch } from "../hooks/hooks";
 import generateApiRequest from "../utils/generateApiRequest";
 import he from "he";
@@ -57,6 +57,7 @@ const AnswerQuestionModal: React.FC = () => {
   };
 
   const handleAnswerSelection = (selectedAnswer: string) => {
+    dispatch(setIsAnswerModalDisabled(true))
     const isCorrect = selectedAnswer === questionData?.correct_answer;
     setSelectedAnswer(selectedAnswer);
     setIsCorrect(isCorrect);

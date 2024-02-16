@@ -1,12 +1,13 @@
 import Level from "../../Assets/Svgs/Level";
 import { useNavigate } from "react-router-dom";
-import { setCategory } from "../../store/TrivvyaSlice";
+import { setCategory, setIsAnswerModalDisabled } from "../../store/TrivvyaSlice";
 import { useAppDispatch } from "../../hooks/hooks";
 export default function CategoryPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const handleCategoryClick = (selectedCategory: string) => {
     dispatch(setCategory(selectedCategory));
+    dispatch(setIsAnswerModalDisabled(true));
     navigate("/puzzle");
   };
 

@@ -17,6 +17,7 @@ import {
   setMcqModel,
   increaseScore,
   setGameOver,
+  setIsAnswerModalDisabled
 } from "../../store/TrivvyaSlice";
 import generateApiRequest from "../../utils/generateApiRequest";
 import AnswerQuestionModal from "../../utils/AnswerQuestionModal";
@@ -30,8 +31,6 @@ import { Adsense } from "@ctrl/react-adsense";
 export default function PuzzlePage() {
   const [isExploding, setIsExploding] = useState(false);
   const [loadingType, setLoadingType] = useState(0);
-  const [isAnswerDisabled, setIsAnswerDisabled] = useState(true);
-
   const navigate = useNavigate();
   const questions = useAppSelector((state) => state.quiz.questions);
   const displayAnswer = useAppSelector((state) => state.quiz.displayAnswer);
@@ -43,6 +42,7 @@ export default function PuzzlePage() {
   const showMcqModal = useAppSelector((state) => state.quiz.showMcqModal);
   const triesLeft = useAppSelector((state) => state.quiz.triesLeft);
   const gameOver = useAppSelector((state) => state.quiz.gameOver);
+  const isAnswerModalDisabled = useAppSelector((state)=>state.quiz.isAnswerModalDisabled)
 
   const dispatch = useAppDispatch();
   type ApiResponse = {
@@ -95,17 +95,26 @@ export default function PuzzlePage() {
   };
 
   const handleAnswerMCQ = () => {
-    if (isAnswerDisabled) {
+    if (isAnswerModalDisabled) {
       toast.info("You can use this tool after 10 seconds!!!", {
         autoClose: 5000,
         pauseOnHover: false,
       });
       return;
     }
-    setIsAnswerDisabled(true);
-
     dispatch(setMcqModel(true));
   };
+
+  const handleCategoryClick =()=>{
+    if (isAnswerModalDisabled) {
+      toast.info("You can use this tool after 10 seconds!!!", {
+        autoClose: 5000,
+        pauseOnHover: false,
+      });
+      return;
+    }
+    navigate("/category")
+  }
 
   const handlePuzzleSolved = () => {
     if (gameOver) {
@@ -153,10 +162,10 @@ export default function PuzzlePage() {
 
   useEffect(() => {
     dispatch(setDisplayAnswer("initialize"));
-  }, [trueAnswer]);
+  }, [trueAnswer,dispatch]);
 
   useEffect(() => {
-    if (!isAnswerDisabled) {
+    if (!isAnswerModalDisabled) {
       toast.success("You can use Answer a question tool now!!!", {
         autoClose: 5000,
         pauseOnHover: false,
@@ -164,9 +173,9 @@ export default function PuzzlePage() {
       return;
     }
     setTimeout(() => {
-      setIsAnswerDisabled(false);
+      dispatch(setIsAnswerModalDisabled(false));
     }, 10000);
-  }, [isAnswerDisabled]);
+  }, [dispatch, isAnswerModalDisabled]);
 
   const handleSolvePuzzle = () => {
     dispatch(setDisplayAnswer(trueAnswer));
@@ -188,16 +197,18 @@ export default function PuzzlePage() {
           <div className="flex md:gap-x-5 justify-center mb-2">
             <Category
               className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-28 md:h-28"
-              onClick={() => {
-                navigate("/category");
-              }}
-              disabled={loading || isAnswerDisabled}
+              // onClick={() => {
+              //   // navigate("/category");
+              //   handleCategoryClick
+              // }}
+              onClick={handleCategoryClick}
+              disabled={loading || isAnswerModalDisabled}
             />
             <div>
               <Answer
                 className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-28 md:h-28"
                 onClick={handleAnswerMCQ}
-                disabled={loading || isAnswerDisabled}
+                disabled={loading || isAnswerModalDisabled}
               />
             </div>
             <Puzzle
