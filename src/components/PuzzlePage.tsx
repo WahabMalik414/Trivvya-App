@@ -25,6 +25,7 @@ import RetriesCount from "./RetryCount";
 import Score from "./Score";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Adsense } from "@ctrl/react-adsense";
 
 export default function PuzzlePage() {
   const [isExploding, setIsExploding] = useState(false);
@@ -182,6 +183,7 @@ export default function PuzzlePage() {
     <>
       <div className="flex  min-h-screen">
         {showMcqModal && <AnswerQuestionModal />}
+        <Adsense client="" slot="" />
         <div className="flex flex-col bg-TrivvyaBlue w-screen">
           <div className="flex md:gap-x-5 justify-center mb-2">
             <Category
