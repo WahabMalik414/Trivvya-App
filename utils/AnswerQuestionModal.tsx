@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { increaseTry, setMcqModel,setIsAnswerModalDisabled } from "../store/TrivvyaSlice";
+import {
+  increaseTry,
+  setMcqModel,
+  setIsAnswerModalDisabled,
+} from "../store/TrivvyaSlice";
 import { useAppDispatch } from "../hooks/hooks";
 import generateApiRequest from "../utils/generateApiRequest";
 import he from "he";
@@ -15,6 +19,7 @@ type ApiResponse = {
 const AnswerQuestionModal: React.FC = () => {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const [shuffledAnswers, setShuffledAnswers] = useState<string[]>([]);
 
   const dispatch = useAppDispatch();
   const [questionData, setQuestionData] = useState<ApiResponse | null>(null);
@@ -29,6 +34,16 @@ const AnswerQuestionModal: React.FC = () => {
     fetchPuzzleData();
   }, []);
 
+  useEffect(() => {
+    if (questionData) {
+      const answers = [
+        ...(questionData.incorrect_answers || []),
+        questionData.correct_answer || " ",
+      ];
+      setShuffledAnswers(shuffleAnswers(answers));
+    }
+  }, [questionData]);
+
   const fetchPuzzleData = async () => {
     try {
       const response = await fetch(generateApiRequest("1", "9", "easy"));
@@ -39,25 +54,23 @@ const AnswerQuestionModal: React.FC = () => {
     }
   };
 
-  const shuffleAnswers = (answers: string[], buttonPressed: boolean) => {
+  const shuffleAnswers = (answers: string[]) => {
     // Fisher-Yates shuffle algorithm
     const shuffledAnswers: string[] = [...answers];
 
-    if (!buttonPressed) {
-      for (let i = shuffledAnswers.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffledAnswers[i], shuffledAnswers[j]] = [
-          shuffledAnswers[j],
-          shuffledAnswers[i],
-        ];
-      }
+    for (let i = shuffledAnswers.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledAnswers[i], shuffledAnswers[j]] = [
+        shuffledAnswers[j],
+        shuffledAnswers[i],
+      ];
     }
 
     return shuffledAnswers;
   };
 
   const handleAnswerSelection = (selectedAnswer: string) => {
-    dispatch(setIsAnswerModalDisabled(true))
+    dispatch(setIsAnswerModalDisabled(true));
     const isCorrect = selectedAnswer === questionData?.correct_answer;
     setSelectedAnswer(selectedAnswer);
     setIsCorrect(isCorrect);
@@ -84,13 +97,7 @@ const AnswerQuestionModal: React.FC = () => {
             {he.decode(questionData?.question || "")}
           </p>
           <div className="flex flex-col mt-4">
-            {shuffleAnswers(
-              [
-                ...(questionData?.incorrect_answers || []),
-                questionData?.correct_answer || " ",
-              ],
-              true
-            ).map((answer, index) => (
+            {shuffledAnswers.map((answer, index) => (
               <button
                 key={index}
                 className={`btn-lg rounded-2xl ${
