@@ -1,4 +1,5 @@
 import { useAppSelector } from "../../hooks/hooks";
+
 export default function RetriesCount() {
   const tries = useAppSelector((state) => state.quiz.triesLeft);
   return (

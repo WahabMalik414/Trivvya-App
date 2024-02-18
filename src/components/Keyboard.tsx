@@ -14,13 +14,12 @@ function QwertyKeyboard() {
   const revealCharacter = UseRevealCharacter();
   const triesLeft = useAppSelector((state) => state.quiz.triesLeft);
 
+  if (triesLeft === 0 || gameOver) {
+    dispatch(setDisplayAnswer(trueAnswer));
+    dispatch(setGameOver(true));
+  }
   const handleButtonClick = (letter: string) => {
-    if (triesLeft === 1 || gameOver) {
-      dispatch(setDisplayAnswer(trueAnswer));
-      dispatch(setGameOver(true));
-    } else {
-      revealCharacter(letter);
-    }
+    revealCharacter(letter);
   };
 
   return (

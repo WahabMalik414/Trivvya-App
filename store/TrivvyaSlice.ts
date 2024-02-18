@@ -12,7 +12,7 @@ interface quizState {
   triesLeft: number;
   showMcqModal: boolean;
   gameOver: boolean;
-  isAnswerModalDisabled:boolean;
+  isAnswerModalDisabled: boolean;
 }
 
 const initialState: quizState = {
@@ -27,8 +27,7 @@ const initialState: quizState = {
   triesLeft: 3,
   showMcqModal: false,
   gameOver: false,
-  isAnswerModalDisabled:true
-
+  isAnswerModalDisabled: true,
 };
 
 const trivvyaSlice = createSlice({
@@ -115,11 +114,11 @@ const trivvyaSlice = createSlice({
         (state.triesLeft = 3),
         (state.showMcqModal = false),
         (state.gameOver = false),
-        (state.isAnswerModalDisabled=true);
+        (state.isAnswerModalDisabled = true);
     },
-    setIsAnswerModalDisabled:(state, action: PayloadAction<boolean>)=>{
-      state.isAnswerModalDisabled = action.payload
-    }
+    setIsAnswerModalDisabled: (state, action: PayloadAction<boolean>) => {
+      state.isAnswerModalDisabled = action.payload;
+    },
   },
 });
 
@@ -140,7 +139,7 @@ export const {
   setGameOver,
   resetGameOver,
   resetState,
-  setIsAnswerModalDisabled
+  setIsAnswerModalDisabled,
 } = trivvyaSlice.actions;
 
 export default trivvyaSlice.reducer;

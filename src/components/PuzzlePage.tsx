@@ -17,7 +17,7 @@ import {
   setMcqModel,
   increaseScore,
   setGameOver,
-  setIsAnswerModalDisabled
+  setIsAnswerModalDisabled,
 } from "../../store/TrivvyaSlice";
 import generateApiRequest from "../../utils/generateApiRequest";
 import AnswerQuestionModal from "../../utils/AnswerQuestionModal";
@@ -42,7 +42,9 @@ export default function PuzzlePage() {
   const showMcqModal = useAppSelector((state) => state.quiz.showMcqModal);
   const triesLeft = useAppSelector((state) => state.quiz.triesLeft);
   const gameOver = useAppSelector((state) => state.quiz.gameOver);
-  const isAnswerModalDisabled = useAppSelector((state)=>state.quiz.isAnswerModalDisabled)
+  const isAnswerModalDisabled = useAppSelector(
+    (state) => state.quiz.isAnswerModalDisabled
+  );
 
   const dispatch = useAppDispatch();
   type ApiResponse = {
@@ -105,7 +107,7 @@ export default function PuzzlePage() {
     dispatch(setMcqModel(true));
   };
 
-  const handleCategoryClick =()=>{
+  const handleCategoryClick = () => {
     if (isAnswerModalDisabled) {
       toast.info("You can use this tool after 10 seconds!!!", {
         autoClose: 5000,
@@ -113,8 +115,8 @@ export default function PuzzlePage() {
       });
       return;
     }
-    navigate("/category")
-  }
+    navigate("/category");
+  };
 
   const handlePuzzleSolved = () => {
     if (gameOver) {
@@ -162,7 +164,7 @@ export default function PuzzlePage() {
 
   useEffect(() => {
     dispatch(setDisplayAnswer("initialize"));
-  }, [trueAnswer,dispatch]);
+  }, [trueAnswer, dispatch]);
 
   useEffect(() => {
     if (!isAnswerModalDisabled) {
@@ -213,10 +215,7 @@ export default function PuzzlePage() {
             </div>
             <Puzzle
               className="transition duration-300 ease-in-out transform hover:scale-110 cursor-pointer w-24 md:w-28 md:h-28"
-              onClick={() => {
-                handleSolvePuzzle();
-                dispatch(setGameOver(true));
-              }}
+              onClick={handleSolvePuzzle}
               disabled={loading}
             />
             <Home
@@ -234,7 +233,7 @@ export default function PuzzlePage() {
               Answer a question from top tab to get more tries. Enjoy the game!
             </p>
             <div className="justify-center items-center">
-              {isExploding && triesLeft !== 1 && (
+              {isExploding && triesLeft !== 0 && (
                 <ConfettiExplosion
                   force={0.8}
                   duration={3000}
